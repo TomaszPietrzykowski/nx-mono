@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "nx-mono",
+            "prefix": ["app", "nx-mono"],
             "style": "kebab-case"
           }
         ]

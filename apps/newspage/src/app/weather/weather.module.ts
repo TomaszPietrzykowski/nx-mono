@@ -5,5 +5,6 @@ import { ForecastComponent } from './forecast/forecast.component';
 @NgModule({
   declarations: [ForecastComponent],
   imports: [CommonModule],
+  exports: [ForecastComponent],
 })
 export class WeatherModule {}
