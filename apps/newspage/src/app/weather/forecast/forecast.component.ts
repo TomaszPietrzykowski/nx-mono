@@ -10,9 +10,8 @@ export class ForecastComponent {
   lat!: string;
   lon!: string;
   constructor(forecastService: ForecastService) {
-    forecastService.getGeolocation().subscribe((coords) => {
-      this.lat = coords.latitude.toString();
-      this.lon = coords.longitude.toString();
+    forecastService.getForecast().subscribe((res) => {
+      console.log(res);
     });
   }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "@nx-mono/model",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "devDependencies": {
+    "@angular-eslint/eslint-plugin": "latest",
+    "@angular-eslint/eslint-plugin-template": "latest",
+    "@angular-eslint/template-parser": "latest",
+    "eslint": "latest"
+  },
+  "eslintConfig": {
+    "plugins": ["@angular-eslint"],
+    "extends": ["plugin:@angular-eslint/recommended"],
+    "ignorePatterns": ["dist", "node_modules"]
+  }
+}
+
