@@ -4,7 +4,7 @@
 
 export interface OpenWeatherResponse {
   list: {
-    dt_text: string;
+    dt_txt: string;
     main: {
       temp: number;
     };

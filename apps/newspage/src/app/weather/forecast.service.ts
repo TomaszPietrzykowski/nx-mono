@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpParams, HttpClient } from '@angular/common/http';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, mergeMap, filter, toArray } from 'rxjs/operators';
 import { OpenWeatherResponse } from '@nx-mono/model';
 
 @Injectable({
@@ -35,7 +35,17 @@ export class ForecastService {
       }),
       switchMap((params) =>
         this.http.get<OpenWeatherResponse>(this._url, { params })
-      )
+      ),
+      map((res) => res?.list),
+      mergeMap((value) => of(...value)),
+      filter((value, index) => index % 8 === 0),
+      map((value) => {
+        return {
+          dateString: value.dt_txt,
+          temp: value.main.temp,
+        };
+      }),
+      toArray()
     );
   }
 }
