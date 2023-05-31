@@ -10,3 +10,8 @@ export interface OpenWeatherResponse {
     };
   }[];
 }
+
+export interface ForecastData {
+  dateString: string;
+  temp: number;
+}

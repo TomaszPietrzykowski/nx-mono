@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ForecastService } from '../forecast.service';
+import { ForecastData } from '@nx-mono/model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-forecast',
@@ -7,11 +9,9 @@ import { ForecastService } from '../forecast.service';
   styleUrls: ['./forecast.component.scss'],
 })
 export class ForecastComponent {
-  lat!: string;
-  lon!: string;
+  forecast$!: Observable<Array<ForecastData>>;
+
   constructor(forecastService: ForecastService) {
-    forecastService.getForecast().subscribe((res) => {
-      console.log(res);
-    });
+    this.forecast$ = forecastService.getForecast();
   }
 }
