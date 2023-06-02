@@ -15,3 +15,9 @@ export interface ForecastData {
   dateString: string;
   temp: number;
 }
+
+export interface Notification {
+  id: number;
+  type: 'success' | 'error' | 'clear';
+  text?: string;
+}

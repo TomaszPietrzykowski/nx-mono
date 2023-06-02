@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class ForecastComponent {
   forecast$!: Observable<Array<ForecastData>>;
 
-  constructor(forecastService: ForecastService) {
-    this.forecast$ = forecastService.getForecast();
+  constructor(private forecastService: ForecastService) {
+    this.forecast$ = this.forecastService.getForecast();
   }
 }

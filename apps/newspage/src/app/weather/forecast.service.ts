@@ -1,16 +1,39 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpParams, HttpClient } from '@angular/common/http';
-import { map, switchMap, mergeMap, filter, toArray } from 'rxjs/operators';
+import {
+  map,
+  switchMap,
+  mergeMap,
+  filter,
+  toArray,
+  share,
+  tap,
+  catchError,
+  retry,
+} from 'rxjs/operators';
 import { OpenWeatherResponse } from '@nx-mono/model';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ForecastService {
   private _url = 'https://api.openweathermap.org/data/2.5/forecast';
+  private _defaultCoordinates: GeolocationCoordinates = {
+    accuracy: 1,
+    altitude: null,
+    altitudeAccuracy: null,
+    heading: null,
+    speed: null,
+    latitude: 52.370216,
+    longitude: 4.895168,
+  };
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private notificationsService: NotificationsService
+  ) {}
 
   getGeolocation() {
     return new Observable<GeolocationCoordinates>((observer) => {
@@ -21,7 +44,24 @@ export class ForecastService {
         },
         (err) => observer.error(err)
       );
-    });
+    }).pipe(
+      retry(1),
+      tap(() => {
+        this.notificationsService.addSuccess('Got your geolocation');
+      }),
+      catchError((err) => {
+        // #1 handle error
+        this.notificationsService.addError(
+          'Failed to get your location, showing weather for Amsterdam, NL'
+        );
+        console.error(err);
+        // #2 return new Observable that will emit the error
+        //    efectively delegate the error handling down the way:
+        // return throwError(() => err);
+        //    or return defaults for getForecast method:
+        return of(this._defaultCoordinates);
+      })
+    );
   }
 
   getForecast() {
@@ -45,7 +85,8 @@ export class ForecastService {
           temp: value.main.temp,
         };
       }),
-      toArray()
+      toArray(),
+      share()
     );
   }
 }
